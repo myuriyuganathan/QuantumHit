@@ -26,14 +26,14 @@ const FileUpload = ({ label, onFileParsed }) => {
   };
 
   return (
-    <div className="file-upload-container">
+    <div className="file-upload-container ">
       <label className="upload-label">{label}</label>
       <input type="file" accept=".csv" onChange={handleFileChange} />
       {status === 'success' && (
-        <p className="upload-success">✅ {filename} uploaded successfully.</p>
+        <p className="upload-success text-purple-700">✅ {filename} uploaded successfully.</p>
       )}
       {status === 'failed' && (
-        <p className="upload-failed">❌ Failed to upload {filename}. Please try again.</p>
+        <p className="upload-failed text-purple-700">❌ Failed to upload {filename}. Please try again.</p>
       )}
     </div>
   );

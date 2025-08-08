@@ -6,6 +6,7 @@ const PlaceOrder = () => {
   const [isUploaded, setIsUploaded] = useState(false);
   const [fileName, setFileName] = useState('');
   const [fileData, setFileData] = useState([]); 
+  const [originalData, setOriginalData] = useState([]); // new state for full data
   const [filteredData, setFilteredData] = useState([]);
   const [rowCount, setRowCount] = useState("All");
   const [systemName, setSystemName] = useState("M_LDEQ_54");
@@ -29,7 +30,6 @@ const PlaceOrder = () => {
       const worksheet = workbook.Sheets[firstSheetName];
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      // Make sure jsonData is an array of arrays
       if (!Array.isArray(jsonData) || jsonData.length === 0) {
         alert("Excel file is empty or invalid.");
         setIsUploaded(false);
@@ -44,9 +44,12 @@ const PlaceOrder = () => {
         .map((h, i) => selectedHeaders.includes(h) ? i : -1)
         .filter(i => i !== -1);
 
+      // Build filteredRows with selected columns only (including headers)
       const filteredRows = jsonData.map(row => headerIndexes.map(i => row[i] || ''));
 
       setFileData(filteredRows);
+      setOriginalData(filteredRows);   // set full original data
+      setFilteredData(filteredRows);   // show all initially
     } catch (err) {
       alert("Failed to read Excel file. Please upload a valid XLSX file.");
       setIsUploaded(false);
@@ -57,27 +60,32 @@ const PlaceOrder = () => {
   };
 
   useEffect(() => {
-    if (fileData.length === 0) {
+    if (originalData.length === 0) {
       setFilteredData([]);
       return;
     }
 
-    const normalize = (str) => str.toLowerCase().replace(/[^a-z]/g, '');
-    const normalizedHeaders = fileData[0].map(normalize);
-    const orderRefIndex = normalizedHeaders.indexOf(normalize("OrderRef"));
-
-    if (orderRefIndex === -1) {
-      setFilteredData(fileData);
+    if (systemName === "All") {
+      setFilteredData(originalData);
       return;
     }
 
-    const filtered = fileData.filter((row, idx) => {
+    const normalize = (str) => str.toLowerCase().replace(/[^a-z]/g, '');
+    const normalizedHeaders = originalData[0].map(normalize);
+    const orderRefIndex = normalizedHeaders.indexOf(normalize("OrderRef"));
+
+    if (orderRefIndex === -1) {
+      setFilteredData(originalData);
+      return;
+    }
+
+    const filtered = originalData.filter((row, idx) => {
       if (idx === 0) return true;
       return row[orderRefIndex]?.trim().toLowerCase() === systemName.trim().toLowerCase();
     });
 
     setFilteredData(filtered);
-  }, [fileData, systemName]);
+  }, [systemName]);
 
   const handlePlaceOrder = (rowData) => {
     alert(`Placing order for Symbol: ${rowData[6]}, Quantity: ${rowData[5]}`);
@@ -112,6 +120,7 @@ const PlaceOrder = () => {
               value={systemName}
               onChange={(e) => setSystemName(e.target.value)}
             >
+              <option value="All">All</option>
               <option value="M_LDEQ_54">M_LDEQ_54</option>
               <option value="TRADQ2">TRADQ2</option>
               <option value="MARKETX">MARKETX</option>

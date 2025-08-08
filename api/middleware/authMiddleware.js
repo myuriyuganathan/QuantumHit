@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const config = require("../config");
-const { verify } = require("../middleware/authMiddleware");
 
 const verify = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -9,7 +8,7 @@ const verify = (req, res, next) => {
 
     jwt.verify(token, config.JWT_SECRET, (err, user) => {
       if (err) {
-        return res.status(403).json({ error: "Token is not valid!" });
+        return res.status(403).json({ error: "Session expired. Please log in again." });
       }
       req.user = user;
       next();

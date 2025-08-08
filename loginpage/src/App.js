@@ -7,6 +7,9 @@ import Main from './components/main/Main';
 import Graph from './components/graph/Graph';
 import About from './components/about/About';
 import ExcelCsv from './components/excelCsvCompare/ExcelCsv';
+import Logout from './components/Logout/Logout';
+import Strategy from './components/strategy/Strategy';
+
 
 function App() {
   return (
@@ -17,7 +20,9 @@ function App() {
         <Route path ="/view-graph" element={<Graph/>}></Route>
         <Route path="/place-order" element={<PlaceOrder/>}></Route>
         <Route path="/about" element = {<About/>}></Route>
-        <Route path="/trade/excelcsv" element = {<ExcelCsv />}></Route>
+        <Route path="/excelcsv" element = {<ExcelCsv />}></Route>
+        <Route path="/logout" element = {<Logout />}></Route>
+        <Route path="/strategy" element = {<Strategy />}></Route>
 
       </Routes>
   );

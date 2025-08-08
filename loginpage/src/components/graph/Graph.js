@@ -24,18 +24,22 @@ const Graph = () => {
   };
 
   return (
-    <>
-      
-      <div className="bg-violet-500 p-6 md:p-12 flex flex-col gap-6 font-serif text-center ">
-        <h2 className="text-white text-2xl font-bold">📊 Upload and View Equity Data</h2>
+    <div className="min-h-screen flex flex-col items-center bg-gray-100 mt-6 p-6 font-serif">
+      <div className="max-w-6xl w-full px-4">
+        <h1 className="text-3xl font-bold text-purple-800 mb-8">
+          📊 Upload and View Equity Data
+        </h1>
 
-        <div className="flex flex-col md:flex-row md:items-end gap-6 text-black font-semibold justify-center">
-          <div className="flex flex-col space-y-2">
+        <div className="bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-start md:items-end gap-6 max-w-3xl mx-auto w-full">
+          <div className="flex flex-col text-black font-bold w-full">
+            <label className="mb-2"></label>
             <FileUpload label="Upload Equity CSV" onFileParsed={handleUpload} />
             <button
-              className={`mt-2 px-4 py-2 rounded-lg font-semibold ${
-                equityData ? "bg-green-600 hover:bg-green-700" : "bg-blue-400 cursor-not-allowed"
-              } text-white transition duration-300`}
+              className={`mt-4 px-6 py-2 rounded-lg font-semibold ${
+                equityData
+                  ? "bg-green-600 text-black hover:bg-green-700"
+                  : "bg-black text-white cursor-not-allowed"
+              } transition duration-300`}
               onClick={() => setView("equity")}
               disabled={!equityData}
             >
@@ -43,15 +47,17 @@ const Graph = () => {
             </button>
           </div>
         </div>
-      </div>
 
-     
-      {view === "equity" && equityData && (
-        <div className="bg-white p-8 min-h-screen w-full">
-          <EquityChart data={equityData} />
-        </div>
-      )}
-    </>
+        {view === "equity" && equityData && (
+          <div className="bg-white rounded-2xl shadow-lg p-10 mt-10 min-h-[500px]">
+            <h2 className="text-xl font-bold mb-6 text-gray-800 text-center">
+              📈 Equity Chart
+            </h2>
+            <EquityChart data={equityData} />
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

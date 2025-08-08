@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const DataTable = ({ fileData, rowCount }) => {
+const DataTable = ({ fileData, rowCount, onPlaceOrder }) => {
   const headers = fileData[0] || [];
   const rows = fileData.slice(1, rowCount === "All" ? undefined : parseInt(rowCount));
 
@@ -28,10 +28,10 @@ const DataTable = ({ fileData, rowCount }) => {
 
   return (
     <div className="mt-4 bg-white rounded-xl p-4 shadow-md overflow-x-auto max-w-full">
-      <table className="w-full text-left border-collapse">
+      <table className="w-full border-collapse text-left table-auto">
         <thead>
           <tr>
-            <th className="border border-gray-300 p-1 md:p-1.5">
+            <th className="border border-gray-300 p-2 text-center">
               <input
                 type="checkbox"
                 onChange={toggleSelectAll}
@@ -41,16 +41,12 @@ const DataTable = ({ fileData, rowCount }) => {
             {headers.map((header, i) => (
               <th
                 key={i}
-                className="border border-gray-300 p-1 md:p-1.5 font-semibold text-gray-700 text-[10px] break-words"
-                style={{ maxWidth: "130px" }}
+                className="border border-gray-300 p-2 font-semibold text-gray-700 text-xs break-words max-w-[130px]"
               >
                 {header}
               </th>
             ))}
-            <th
-              className="border border-gray-300 p-1 md:p-1.5 font-semibold text-gray-700 text-[10px] break-words"
-              style={{ maxWidth: "100px" }}
-            >
+            <th className="border border-gray-300 p-2 font-semibold text-gray-700 text-xs text-center max-w-[100px]">
               Action
             </th>
           </tr>
@@ -58,7 +54,7 @@ const DataTable = ({ fileData, rowCount }) => {
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="hover:bg-gray-100">
-              <td className="border border-gray-300 p-1 md:p-1.5 text-center">
+              <td className="border border-gray-300 p-2 text-center">
                 <input
                   type="checkbox"
                   checked={selectedRows.includes(i)}
@@ -68,13 +64,12 @@ const DataTable = ({ fileData, rowCount }) => {
               {row.map((cell, j) => (
                 <td
                   key={j}
-                  className="border border-gray-300 p-1 md:p-1.5 text-gray-600 text-xs max-w-[130px] break-words"
-                  style={{ maxWidth: "130px" }}
+                  className="border border-gray-300 p-2 text-gray-600 text-xs break-words max-w-[130px]"
                 >
                   {cell}
                 </td>
               ))}
-              <td className="border border-gray-300 p-1 md:p-1.5 text-center">
+              <td className="border border-gray-300 p-2 text-center">
                 <button
                   className="bg-blue-500 text-white px-2 py-1 rounded text-xs hover:bg-blue-600 transition"
                   onClick={() => alert(`Placed order for row ${i + 1}`)}
@@ -86,11 +81,12 @@ const DataTable = ({ fileData, rowCount }) => {
           ))}
         </tbody>
       </table>
+
       {selectedRows.length > 0 && (
-        <div className="mt-2">
+        <div className="mt-2 text-center">
           <button
             onClick={placeOrder}
-            className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
           >
             Place Order for Selected
           </button>
